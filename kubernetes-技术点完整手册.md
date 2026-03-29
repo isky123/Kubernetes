@@ -830,21 +830,50 @@ kubectl exec -it <pod-name> -- cat /etc/resolv.conf
 </Aside>
 
 ### 4.4 CNI 网络插件
-
-<img width="1345" height="295" alt="image" src="https://github.com/user-attachments/assets/5d91551f-527f-4201-846e-ebd18638d688" />
-
-
+ 
+| 插件 | 模式 | 特点 |
+|------|------|------|
+| **Flannel** | VXLAN Overlay | 简单易用，性能略低，适合入门 |
+| **Calico** | BGP / IPIP | 高性能，支持 NetworkPolicy |
+| **Cilium** | eBPF | 超高性能，支持 L7 策略，可观测性强 |
+| **Weave Net** | Overlay | 支持加密，多云场景 |
+ 
 ### 4.5 NetworkPolicy
-
+ 
 NetworkPolicy 是 K8s **网络防火墙**，控制 Pod 间通信（默认 Pod 间完全互通）：
-
-<img width="1345" height="295" alt="image" src="https://github.com/user-attachments/assets/7cc92428-f47e-43eb-9be0-99f692347143" />
-
-
+ 
+```mermaid
+graph LR
+    subgraph NS["Namespace: production"]
+        subgraph FE["前端 Pod 组\n(app=frontend)"]
+            F1["frontend-1"]
+            F2["frontend-2"]
+        end
+        subgraph BE["后端 Pod 组\n(app=backend)"]
+            B1["backend-1"]
+            B2["backend-2"]
+        end
+        subgraph DB["数据库 Pod 组\n(app=database)"]
+            D1["mysql-0"]
+        end
+    end
+ 
+    Internet["🌍 外部"] -->|"✅ 允许 :80"| FE
+    FE -->|"✅ 允许 :8080"| BE
+    BE -->|"✅ 允许 :3306"| DB
+    Internet -.->|"❌ 拒绝"| BE
+    Internet -.->|"❌ 拒绝"| DB
+    FE -.->|"❌ 拒绝"| DB
+ 
+    style DB fill:#fee2e2,stroke:#ef4444
+    style BE fill:#dbeafe,stroke:#3b82f6
+    style FE fill:#dcfce7,stroke:#22c55e
+```
+ 
 <Aside type="caution">
 NetworkPolicy 需要 CNI 插件支持（Calico / Cilium），**Flannel 不支持** NetworkPolicy。
 </Aside>
-
+ 
 ---
 
 ## 第五章 存储
