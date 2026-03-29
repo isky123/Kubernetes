@@ -1,18 +1,4 @@
 ---
-title: Kubernetes 技术点完整手册
-description: 从入门到进阶的 K8s 系统化知识体系，适用于 K8s v1.18 ~ v1.29，Java 开发者视角
-sidebar:
-  order: 1
-  badge:
-    text: 完整版
-    variant: tip
-tableOfContents:
-  minHeadingLevel: 2
-  maxHeadingLevel: 3
----
-
-import { Aside, Badge, Card, CardGrid, Tabs, TabItem, Steps, Code } from '@astrojs/starlight/components';
-
 > **K8s v1.18 ~ v1.29 适用 · Java 开发者视角**
 
 ---
@@ -2124,3 +2110,5 @@ export default defineConfig({
 });
 ```
 :::
+
+本文档如有遗漏和错误，欢迎勘误！
